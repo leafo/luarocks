@@ -61,11 +61,22 @@ function deplocks.load(root_rock_name: string, dirname: string): boolean, string
 
    -- FIXME we're not really checking that the table is a DepsTable
    depstable = result as DepsTable
+
+   -- Discard any previously pinned version for `lua`.
+   if depstable.dependencies and depstable.dependencies["lua"] then
+      depstable.dependencies["lua"] = nil
+   end
+
    return true, filename
 end
 
 function deplocks.add(depskey: DepsKey, name: string, version: string)
    if depstable_mode == "locked" then
+      return
+   end
+
+   -- Do not pin `lua`: it is a special pseudo-dependency.
+   if name == "lua" then
       return
    end
 

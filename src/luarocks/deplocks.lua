@@ -61,11 +61,22 @@ function deplocks.load(root_rock_name, dirname)
 
 
    depstable = result
+
+
+   if depstable.dependencies and depstable.dependencies["lua"] then
+      depstable.dependencies["lua"] = nil
+   end
+
    return true, filename
 end
 
 function deplocks.add(depskey, name, version)
    if depstable_mode == "locked" then
+      return
+   end
+
+
+   if name == "lua" then
       return
    end
 
